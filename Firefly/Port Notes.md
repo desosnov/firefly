@@ -140,6 +140,22 @@ Quirks in the original that were reproduced rather than fixed. None of these are
 
 ---
 
+## 3b. Deliberate additions
+
+Requested by Denis, beyond the scope of the port.
+
+**Serial port picker (2026-08-11).** The C++ had the device name in a `#define`, so moving between machines meant a rebuild — which defeats the point of shipping a Mac executable built on the PC. Added:
+
+- A **Port** field and **Apply** button, top-left, drawn in `FireflyController.OnGUI`
+- A list of previously-successful ports below it; clicking one attempts a connection
+- Ports are recorded to `firefly_ports.txt` beside the executable — beside `Assets/` when running in the Editor — most recent first, capped at 8
+- **Only ports that opened successfully are recorded**, so the list can't fill with typos
+- On launch the most recent is reopened; with no history it falls back to the old `WIN_COM` / `MAC_COM` constants, which now serve only as first-run defaults
+
+IMGUI rather than uGUI or UI Toolkit: it needs no canvas, no prefabs and nothing wired up in the editor, which preserves the port's "open the project and press Play" property. `firefly_ports.txt` is gitignored as machine-specific.
+
+One rough edge: on Windows, connecting sleeps two seconds to match `Serial-PC.cpp`'s `Sleep(ARDUINO_WAIT_TIME)`, so the window freezes briefly on Apply.
+
 ## 3a. Additions with no counterpart in the original
 
 Audited 2026-08-11 after Denis asked where logic had been changed without being asked. These are the only places the port does something the C++ didn't.

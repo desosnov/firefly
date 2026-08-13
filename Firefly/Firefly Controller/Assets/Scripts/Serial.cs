@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.IO.Ports;
 using UnityEngine;
 
@@ -6,14 +8,19 @@ namespace Firefly
 {
     /// <summary>
     /// Port of Serial.h / .cpp plus the two platform back-ends (Serial-PC.cpp on
-    /// Windows, arduino-serial-lib.c on Mac). System.IO.Ports.SerialPort covers both,
-    /// so the #ifdef split collapses to a port-name choice. See Port Notes.
+    /// Windows, arduino-serial-lib.cpp on Mac). System.IO.Ports.SerialPort covers
+    /// both, so the #ifdef split collapses to a few platform-conditional settings.
+    ///
+    /// Beyond the port: the device name is no longer fixed at compile time. Ports
+    /// that connect successfully are remembered in a text file beside the
+    /// executable, and the most recent one is reopened on the next run. This is an
+    /// addition, not a port — the C++ had the name in a #define. See Port Notes.
     ///
     /// Requires Player Settings -> Api Compatibility Level = .NET Framework.
     /// </summary>
     public class Serial
     {
-        // Was COM9 in the C++; the Teensy enumerates on COM4 on Denis's current PC.
+        // The C++ #defines, now only fallbacks for a first run with no history.
         public const string WIN_COM = "COM4";
         public const string MAC_COM = "/dev/cu.usbmodem27946701";
 
@@ -26,17 +33,63 @@ namespace Firefly
         // Serial-PC.cpp slept this long after connecting, for the board to reset.
         public const int ARDUINO_WAIT_TIME = 2000;
 
+        public const string PORTS_FILE = "firefly_ports.txt";
+        public const int MAX_REMEMBERED_PORTS = 8;
+
         private SerialPort port;
+        private List<string> recentPorts = new List<string>();
+
+        /// <summary>Ports that have connected before, most recent first.</summary>
+        public IList<string> RecentPorts { get { return recentPorts; } }
+
+        /// <summary>The port currently open, or the last one attempted.</summary>
+        public string CurrentPort { get; private set; }
+
+        public static bool IsWindows
+        {
+            get
+            {
+                return Application.platform == RuntimePlatform.WindowsPlayer
+                    || Application.platform == RuntimePlatform.WindowsEditor;
+            }
+        }
+
+        public static string DefaultPortName { get { return IsWindows ? WIN_COM : MAC_COM; } }
+
+        /// <summary>
+        /// Beside the executable in a build; beside the Assets folder in the Editor.
+        /// </summary>
+        private static string PortsFilePath
+        {
+            get { return Path.Combine(Directory.GetParent(Application.dataPath).FullName, PORTS_FILE); }
+        }
 
         public bool InitComms()
         {
-            bool windows = Application.platform == RuntimePlatform.WindowsPlayer
-                           || Application.platform == RuntimePlatform.WindowsEditor;
-            string portName = windows ? WIN_COM : MAC_COM;
+            LoadRecentPorts();
+
+            string first = recentPorts.Count > 0 ? recentPorts[0] : DefaultPortName;
+            CurrentPort = first;
+            TryOpen(first);
+
+            return true;
+        }
+
+        /// <summary>
+        /// Closes any open port and attempts the named one. Returns whether it
+        /// opened. Only successful ports are remembered.
+        /// </summary>
+        public bool TryOpen(string portName)
+        {
+            if (string.IsNullOrEmpty(portName)) return false;
+
+            portName = portName.Trim();
+            CurrentPort = portName;
+            Close();
 
             try
             {
-                port = new SerialPort(portName, windows ? WIN_BAUD : COM_BAUD);
+                port = new SerialPort(portName, IsWindows ? WIN_BAUD : COM_BAUD);
 
                 // The C++ used a blocking WriteFile / write(). A finite timeout here
                 // would throw whenever the device fell behind, which it will — the
@@ -50,16 +103,19 @@ namespace Firefly
 
                 port.Open();
 
-                if (windows)
+                if (IsWindows)
                 {
                     // Matches PurgeComm(PURGE_RXCLEAR | PURGE_TXCLEAR) followed by
-                    // Sleep(ARDUINO_WAIT_TIME) in Serial-PC.cpp.
+                    // Sleep(ARDUINO_WAIT_TIME) in Serial-PC.cpp. Blocks for two
+                    // seconds, so the window freezes briefly on connect.
                     port.DiscardInBuffer();
                     port.DiscardOutBuffer();
                     System.Threading.Thread.Sleep(ARDUINO_WAIT_TIME);
                 }
 
+                RememberPort(portName);
                 FireflyUtils.Log("[Serial] Opened " + portName);
+                return true;
             }
             catch (Exception e)
             {
@@ -67,9 +123,8 @@ namespace Firefly
                 // false; same outcome here, and the app runs preview-only.
                 port = null;
                 FireflyUtils.Log("[Serial] Could not open " + portName + " — running without LED output. (" + e.Message + ")");
+                return false;
             }
-
-            return true;
         }
 
         public bool Available()
@@ -117,6 +172,50 @@ namespace Firefly
                 try { if (port.IsOpen) port.Close(); }
                 catch (Exception) { }
                 port = null;
+            }
+        }
+
+        // ── Remembered ports ────────────────────────────────────
+
+        private void RememberPort(string portName)
+        {
+            recentPorts.Remove(portName);
+            recentPorts.Insert(0, portName);
+            while (recentPorts.Count > MAX_REMEMBERED_PORTS)
+            {
+                recentPorts.RemoveAt(recentPorts.Count - 1);
+            }
+            SaveRecentPorts();
+        }
+
+        private void LoadRecentPorts()
+        {
+            recentPorts.Clear();
+            try
+            {
+                if (!File.Exists(PortsFilePath)) return;
+
+                foreach (string line in File.ReadAllLines(PortsFilePath))
+                {
+                    string p = line.Trim();
+                    if (p.Length > 0 && !recentPorts.Contains(p)) recentPorts.Add(p);
+                }
+            }
+            catch (Exception e)
+            {
+                FireflyUtils.Log("[Serial] Could not read " + PORTS_FILE + ". (" + e.Message + ")");
+            }
+        }
+
+        private void SaveRecentPorts()
+        {
+            try
+            {
+                File.WriteAllLines(PortsFilePath, new List<string>(recentPorts).ToArray());
+            }
+            catch (Exception e)
+            {
+                FireflyUtils.Log("[Serial] Could not write " + PORTS_FILE + ". (" + e.Message + ")");
             }
         }
     }

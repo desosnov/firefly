@@ -40,3 +40,8 @@ $RECYCLE.BIN/
 build/
 *.hex
 *.elf
+
+# ── Firefly runtime state ───────────────────────────────
+# Remembered serial ports, written beside the executable (and beside
+# Assets/ when running in the Editor). Machine-specific.
+firefly_ports.txt

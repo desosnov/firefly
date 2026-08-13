@@ -103,6 +103,7 @@ namespace Firefly
 
             serial = new Serial();
             serial.InitComms();
+            portField = serial.CurrentPort;
 
             calibration = null;
             FireflyUtils.Log("[FFC] Finish controller instantiation");
@@ -315,6 +316,61 @@ namespace Firefly
             Material wallMat = new Material(Resources.Load<Material>("FireflyWall"));
             wallMat.SetColor(BaseColorID, new Color(PixelStage.CYL_DARKNESS, PixelStage.CYL_DARKNESS, PixelStage.CYL_DARKNESS, PixelStage.CYL_ALPHA));
             cylinderWalls.GetComponent<MeshRenderer>().material = wallMat;
+        }
+
+        // ── Port picker ─────────────────────────────────────────
+        //
+        // Not part of the port. The C++ had the device name in a #define, which meant
+        // a rebuild to move machines. IMGUI is used deliberately: it needs no canvas,
+        // no prefabs and nothing wired up in the editor, which keeps the "open and
+        // press Play" property. See Port Notes.
+
+        private const float PORT_PANEL_MARGIN = 10f;
+        private const float PORT_PANEL_WIDTH = 200f;
+
+        private string portField = "";
+
+        void OnGUI()
+        {
+            if (serial == null) return;
+
+            GUILayout.BeginArea(new Rect(PORT_PANEL_MARGIN, PORT_PANEL_MARGIN, PORT_PANEL_WIDTH, Screen.height - PORT_PANEL_MARGIN * 2));
+
+            GUILayout.Label("Port");
+
+            GUILayout.BeginHorizontal();
+            portField = GUILayout.TextField(portField);
+            bool apply = GUILayout.Button("Apply", GUILayout.Width(55));
+            GUILayout.EndHorizontal();
+
+            GUILayout.Label(serial.Available()
+                ? "Connected: " + serial.CurrentPort
+                : "Not connected");
+
+            string clicked = null;
+            if (serial.RecentPorts.Count > 0)
+            {
+                GUILayout.Space(8);
+                GUILayout.Label("Recent");
+                for (int i = 0; i < serial.RecentPorts.Count; i++)
+                {
+                    // Captured rather than acted on immediately — TryOpen reorders
+                    // the list this loop is walking.
+                    if (GUILayout.Button(serial.RecentPorts[i])) clicked = serial.RecentPorts[i];
+                }
+            }
+
+            GUILayout.EndArea();
+
+            if (apply)
+            {
+                serial.TryOpen(portField);
+            }
+            else if (clicked != null)
+            {
+                portField = clicked;
+                serial.TryOpen(clicked);
+            }
         }
 
         // ── Input ───────────────────────────────────────────────
