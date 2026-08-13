@@ -156,6 +156,28 @@ IMGUI rather than uGUI or UI Toolkit: it needs no canvas, no prefabs and nothing
 
 One rough edge: on Windows, connecting sleeps two seconds to match `Serial-PC.cpp`'s `Sleep(ARDUINO_WAIT_TIME)`, so the window freezes briefly on Apply.
 
+**Wifi transport (2026-08-11).** `Transport.cs`. The C++ spoke to one board over one USB cable, so `Serial` had nothing above it. Now:
+
+- `ATransport` — `Available()` / `Write()` / `Close()` / `Describe()`. `Serial` and `WifiTransport` both implement it, and `PixelStage.RenderLED` takes the abstraction, so nothing in the render path knows which is in use. Only one is connected at a time; connecting one closes the other.
+- **Streaming** is UDP on port 21324. A 1,440-pixel frame is 4,320 bytes against a ~1,500-byte MTU, so it splits into 4 chunks behind an 8-byte header (magic, frame sequence, chunk index, chunk count, first pixel, pixel count) that the firmware reassembles.
+- **Rate limiting.** Serial throttled the render loop by blocking; UDP sends are fire-and-forget and would flood the device at several hundred FPS. `WifiTransport.SEND_INTERVAL` holds output to 60 FPS. The render loop itself is left uncapped.
+- **Discovery on the LAN** is a UDP broadcast probe (`FIREFLY?` / `FIREFLY!name|pixels`) rather than mDNS — both ends are ours, so this is a fraction of the complexity and adequate for a LAN.
+- **Provisioning** is SoftAP over HTTP: `GET /firefly` to identify, `GET /provision?ssid=…&pass=…` to hand over credentials. Denis's decision, 2026-08-11, over BLE.
+
+**Receiver firmware (2026-08-11).** `firefly_receiver/firefly_receiver.ino`, one sketch for both boards. The Teensy 3.2 compiles serial-only; the ESP32-S3 compiles serial plus wifi. Board detected via `ARDUINO_TEENSY32` / `__MK20DX256__` against `CONFIG_IDF_TARGET_ESP32S3` / `ARDUINO_ESP32S3_DEV`, with an `#error` on anything else.
+
+The LED output, brightness fading, worm and strobe screensaver are lifted verbatim from `Code/Firefly Original/firefly_receiver`. Only the input path is new.
+
+Three behavioural changes, all on the input side:
+
+- **Frame assembly.** UDP chunks land in a staging buffer and are only copied to `leds[]` once every chunk of a frame has arrived, so a dropped packet can't tear one frame across two updates.
+- **Hold-last-frame on underrun.** The original dropped straight to the screensaver the moment input stuttered. Now the last complete frame is held for `INPUT_TIMEOUT_MS` before falling back.
+- **Serial reads are non-blocking.** The original blocked per pixel with a 2-second timeout, which would have starved the wifi and HTTP handlers. `readSerialFrame` returns false rather than waiting when there's nothing there.
+
+**The channel swap is preserved on both transports.** The original read three bytes as `b, g, r` and assigned `red` from the *third*, so the desktop's red lands in blue. Wifi applies the same mapping, so the two transports produce identical output. Fixing it means changing both ends in the same commit.
+
+**Joining and leaving the device's access point is manual.** Unity has no wifi APIs, so programmatic switching would need `netsh`/Native Wifi on Windows and CoreWLAN on macOS, and both platforms now gate SSID enumeration behind Location Services — Apple also removed the `airport` CLI in Sonoma 14.4. Two clicks in the OS wifi menu, once per device, costs nothing and works identically on both.
+
 ## 3a. Additions with no counterpart in the original
 
 Audited 2026-08-11 after Denis asked where logic had been changed without being asked. These are the only places the port does something the C++ didn't.

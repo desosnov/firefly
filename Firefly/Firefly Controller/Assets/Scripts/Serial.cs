@@ -18,7 +18,7 @@ namespace Firefly
     ///
     /// Requires Player Settings -> Api Compatibility Level = .NET Framework.
     /// </summary>
-    public class Serial
+    public class Serial : ATransport
     {
         // The C++ #defines, now only fallbacks for a first run with no history.
         public const string WIN_COM = "COM4";
@@ -127,12 +127,17 @@ namespace Firefly
             }
         }
 
-        public bool Available()
+        public override bool Available()
         {
             return port != null && port.IsOpen;
         }
 
-        public int Write(byte[] buffer, int size)
+        public override string Describe()
+        {
+            return Available() ? "Serial: " + CurrentPort : "Serial";
+        }
+
+        public override int Write(byte[] buffer, int size)
         {
             if (!Available()) return 0;
 
@@ -165,7 +170,7 @@ namespace Firefly
             }
         }
 
-        public void Close()
+        public override void Close()
         {
             if (port != null)
             {

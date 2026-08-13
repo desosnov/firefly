@@ -41,6 +41,8 @@ namespace Firefly
         private CylinderCalibration calibration;
         private AAnimation activeAnim;
         private Serial serial;
+        private WifiTransport wifi;
+        private ATransport activeTransport;
 
         private double lastX, lastY;
         private bool moveCamera;
@@ -105,6 +107,9 @@ namespace Firefly
             serial.InitComms();
             portField = serial.CurrentPort;
 
+            wifi = new WifiTransport();
+            if (serial.Available()) activeTransport = serial;
+
             calibration = null;
             FireflyUtils.Log("[FFC] Finish controller instantiation");
 
@@ -118,6 +123,7 @@ namespace Firefly
         void OnDestroy()
         {
             if (serial != null) serial.Close();
+            if (wifi != null) wifi.Close();
             FireflyUtils.Log("[FFC] Shut down");
         }
 
@@ -207,7 +213,7 @@ namespace Firefly
             processTime += lastProcessTime;
             timeAnchor = Time.realtimeSinceStartupAsDouble;
 
-            if (serial.Available()) stage.RenderLED(serial);
+            if (activeTransport != null && activeTransport.Available()) stage.RenderLED(activeTransport);
 
             lastOutputTime = Time.realtimeSinceStartupAsDouble - timeAnchor;
             outputTime += lastOutputTime;
@@ -318,58 +324,108 @@ namespace Firefly
             cylinderWalls.GetComponent<MeshRenderer>().material = wallMat;
         }
 
-        // ── Port picker ─────────────────────────────────────────
+        // ── Connection UI ───────────────────────────────────────
         //
-        // Not part of the port. The C++ had the device name in a #define, which meant
-        // a rebuild to move machines. IMGUI is used deliberately: it needs no canvas,
-        // no prefabs and nothing wired up in the editor, which keeps the "open and
-        // press Play" property. See Port Notes.
+        // Not part of the port. The C++ had the device name in a #define and knew
+        // only about serial. IMGUI is used deliberately: it needs no canvas, no
+        // prefabs and nothing wired up in the editor, which keeps the "open and press
+        // Play" property. See Port Notes §3b.
 
-        private const float PORT_PANEL_MARGIN = 10f;
-        private const float PORT_PANEL_WIDTH = 200f;
+        private const float PANEL_MARGIN = 10f;
+        private const float PANEL_WIDTH = 220f;
 
         private string portField = "";
+        private string ssidField = "";
+        private string passField = "";
+        private List<FireflyDevice> networkDevices = new List<FireflyDevice>();
+        private FireflyDevice pendingDevice;   // found on its own AP, awaiting credentials
 
         void OnGUI()
         {
             if (serial == null) return;
 
-            GUILayout.BeginArea(new Rect(PORT_PANEL_MARGIN, PORT_PANEL_MARGIN, PORT_PANEL_WIDTH, Screen.height - PORT_PANEL_MARGIN * 2));
+            GUILayout.BeginArea(new Rect(PANEL_MARGIN, PANEL_MARGIN, PANEL_WIDTH, Screen.height - PANEL_MARGIN * 2));
 
+            GUILayout.Label(activeTransport != null && activeTransport.Available()
+                ? activeTransport.Describe()
+                : "Not connected");
+
+            // ── USB ──
+            GUILayout.Space(8);
             GUILayout.Label("Port");
 
             GUILayout.BeginHorizontal();
             portField = GUILayout.TextField(portField);
-            bool apply = GUILayout.Button("Apply", GUILayout.Width(55));
+            bool applyPort = GUILayout.Button("Apply", GUILayout.Width(55));
             GUILayout.EndHorizontal();
 
-            GUILayout.Label(serial.Available()
-                ? "Connected: " + serial.CurrentPort
-                : "Not connected");
-
-            string clicked = null;
-            if (serial.RecentPorts.Count > 0)
+            string clickedPort = null;
+            for (int i = 0; i < serial.RecentPorts.Count; i++)
             {
-                GUILayout.Space(8);
-                GUILayout.Label("Recent");
-                for (int i = 0; i < serial.RecentPorts.Count; i++)
-                {
-                    // Captured rather than acted on immediately — TryOpen reorders
-                    // the list this loop is walking.
-                    if (GUILayout.Button(serial.RecentPorts[i])) clicked = serial.RecentPorts[i];
-                }
+                // Captured rather than acted on immediately — TryOpen reorders the
+                // list this loop is walking.
+                if (GUILayout.Button(serial.RecentPorts[i])) clickedPort = serial.RecentPorts[i];
+            }
+
+            // ── Fireflies on the network ──
+            GUILayout.Space(10);
+            GUILayout.Label("Wifi");
+            bool scanNetwork = GUILayout.Button("Scan network");
+
+            FireflyDevice clickedDevice = null;
+            for (int i = 0; i < networkDevices.Count; i++)
+            {
+                if (GUILayout.Button(networkDevices[i].ToString())) clickedDevice = networkDevices[i];
+            }
+            if (scanNetwork && networkDevices.Count == 0) GUILayout.Label("None found");
+
+            // ── Pairing a new Firefly ──
+            GUILayout.Space(10);
+            GUILayout.Label("Pair new");
+            GUILayout.Label("Join the Firefly's own network first", GUI.skin.box);
+            bool scanAP = GUILayout.Button("Scan for new Firefly");
+
+            bool provision = false;
+            if (pendingDevice != null)
+            {
+                GUILayout.Label("Found " + pendingDevice.name);
+                GUILayout.Label("Network");
+                ssidField = GUILayout.TextField(ssidField);
+                GUILayout.Label("Password");
+                passField = GUILayout.PasswordField(passField, '*');
+                provision = GUILayout.Button("Send credentials");
             }
 
             GUILayout.EndArea();
 
-            if (apply)
+            // Acted on after the layout pass, so nothing mutates a list mid-draw.
+            if (applyPort) ConnectSerial(portField);
+            else if (clickedPort != null) { portField = clickedPort; ConnectSerial(clickedPort); }
+            else if (scanNetwork) networkDevices = FireflyDiscovery.ScanNetwork();
+            else if (clickedDevice != null) ConnectWifi(clickedDevice);
+            else if (scanAP) pendingDevice = FireflyDiscovery.ScanSoftAP();
+            else if (provision && FireflyDiscovery.Provision(ssidField, passField))
             {
-                serial.TryOpen(portField);
+                pendingDevice = null;
+                passField = "";
             }
-            else if (clicked != null)
+        }
+
+        private void ConnectSerial(string portName)
+        {
+            if (serial.TryOpen(portName))
             {
-                portField = clicked;
-                serial.TryOpen(clicked);
+                wifi.Close();
+                activeTransport = serial;
+            }
+        }
+
+        private void ConnectWifi(FireflyDevice device)
+        {
+            if (wifi.Connect(device))
+            {
+                serial.Close();
+                activeTransport = wifi;
             }
         }
 

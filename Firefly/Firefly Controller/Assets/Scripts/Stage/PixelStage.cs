@@ -253,8 +253,11 @@ namespace Firefly
 
         public bool ShouldDrawCylinderWalls() { return drawCylinderWalls; }
 
-        /// <summary>Port of renderLED. Writes 3 bytes per pixel to the serial port.</summary>
-        public void RenderLED(Serial serial)
+        /// <summary>
+        /// Port of renderLED. Writes 3 bytes per pixel to whichever transport is
+        /// connected — the C++ only knew about serial. See Port Notes §3b.
+        /// </summary>
+        public void RenderLED(ATransport transport)
         {
             if (powerDraw > 0.0 && Math.Abs(targetPower / powerDraw - 1.0) > PS_BRIGHTNESS_MOVE_THRESHOLD)
             {
@@ -286,7 +289,7 @@ namespace Firefly
                 powerDraw += ((float)(r + g + b)) / 255.0f * (float)MILLIAMPS_PER_COLOR;
             }
 
-            serial.Write(pixelOut, 3 * pixelsLen);
+            transport.Write(pixelOut, 3 * pixelsLen);
         }
 
         public Vector3 GetCentroid()
