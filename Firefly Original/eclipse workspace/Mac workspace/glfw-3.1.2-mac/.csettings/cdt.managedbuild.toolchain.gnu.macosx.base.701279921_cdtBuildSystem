@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 5.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage2">
+    	
+    <storageModule moduleId="cdtBuildSystem" version="4.0.0">
+        		
+        <configuration artifactName="${ProjName}" buildProperties="" description="" id="cdt.managedbuild.toolchain.gnu.macosx.base.701279921" name="Default" optionalBuildProperties="org.eclipse.cdt.docker.launcher.containerbuild.property.selectedvolumes=,org.eclipse.cdt.docker.launcher.containerbuild.property.volumes=" parent="org.eclipse.cdt.build.core.emptycfg">
+            			
+            <folderInfo id="cdt.managedbuild.toolchain.gnu.macosx.base.701279921.1902333366" name="/" resourcePath="">
+                				
+                <toolChain id="cdt.managedbuild.toolchain.gnu.macosx.base.769462493" name="MacOSX GCC" superClass="cdt.managedbuild.toolchain.gnu.macosx.base" targetTool="cdt.managedbuild.tool.gnu.cpp.linker;cdt.managedbuild.tool.macosx.c.linker.macosx.base;cdt.managedbuild.tool.gnu.archiver" unusedChildren="cdt.managedbuild.tool.macosx.cpp.linker.macosx.base">
+                    					
+                    <targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.MachO64" id="cdt.managedbuild.target.gnu.platform.macosx.base.2010930457" name="Debug Platform" osList="macosx" superClass="cdt.managedbuild.target.gnu.platform.macosx.base"/>
+                    					
+                    <builder id="cdt.managedbuild.target.gnu.builder.macosx.base.1337814274" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.macosx.base"/>
+                    					
+                    <tool id="cdt.managedbuild.tool.gnu.cpp.linker.251222766" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker">
+                        						
+                        <inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1863331009" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
+                            							
+                            <additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
+                            							
+                            <additionalInput kind="additionalinput" paths="$(LIBS)"/>
+                            						
+                        </inputType>
+                        					
+                    </tool>
+                    					
+                    <tool id="cdt.managedbuild.tool.macosx.c.linker.macosx.base.411230143" name="MacOS X C Linker" superClass="cdt.managedbuild.tool.macosx.c.linker.macosx.base"/>
+                    					
+                    <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.macosx.base.522919156" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.macosx.base">
+                        						
+                        <option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="true" id="gnu.cpp.compiler.option.include.paths.1683955290" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath"/>
+                        						
+                        <inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1877964802" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
+                        					
+                    </tool>
+                    					
+                    <tool id="cdt.managedbuild.tool.gnu.assembler.macosx.base.1229616528" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.macosx.base">
+                        						
+                        <inputType id="cdt.managedbuild.tool.gnu.assembler.input.1316385006" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+                        					
+                    </tool>
+                    					
+                    <tool id="cdt.managedbuild.tool.gnu.archiver.macosx.base.189934408" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.macosx.base"/>
+                    					
+                    <tool id="cdt.managedbuild.tool.gnu.c.compiler.macosx.base.1972563092" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.macosx.base">
+                        						
+                        <inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1569466458" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+                        					
+                    </tool>
+                    				
+                </toolChain>
+                			
+            </folderInfo>
+            		
+        </configuration>
+        	
+    </storageModule>
+    
+</cproject>

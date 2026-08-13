@@ -1,0 +1,79 @@
+
+/*
+
+int red, green, blue;
+char data[3];
+double trigger = 0.0;
+int pixelCount = 0;
+
+char pixelBuf[1152*3];
+char checks[4];
+int frame = 0;
+double heartbeat = 1.0;
+double marker;
+double render = 0.0, wait = 0.0, read = 0.0, write = 0.0, fps = 0.0;
+int colorSize = 384, colorMax = 100;
+
+if(portOpen) {
+	while(1) {
+		marker = glfwGetTime();
+		for(int pixel = 0; pixel < 1152; pixel++) {
+			int pos = (pixel + frame*9) % (colorSize*3);
+			if(pos < colorSize) {
+				red = (pos%colorSize)*colorMax/colorSize;
+				green = 0;
+				blue = 0;
+			} else if (pos < colorSize*2) {
+				red = 0;
+				green = (pos%colorSize)*colorMax/colorSize;;
+				blue = 0;
+			} else {
+				red = 0;
+				green = 0;
+				blue = (pos%colorSize)*colorMax/colorSize;;
+			}
+			pixelBuf[pixel*3] = red;
+			pixelBuf[pixel*3+1] = green;
+			pixelBuf[pixel*3+2] = blue;
+		}
+
+		/*for(int i = 0; i < 1152*3; i++) {
+			pixelBuf[i] = 0;
+		}
+		pixelBuf[(frame%576)*3] = 55;
+		pixelBuf[(frame%576)*3+1] = 55;
+		pixelBuf[(frame%576)*3+2] = 55;
+
+		render += glfwGetTime() - marker;
+		marker = glfwGetTime();
+
+//			cout << "Check char " << checks[0] << " times "
+//					<< (int)checks[1] << " " << (int)checks[2] << " " << (int)checks[3] << endl;
+
+
+
+		wait += glfwGetTime() - marker;
+		marker = glfwGetTime();
+
+		read += glfwGetTime() - marker;
+		marker = glfwGetTime();
+		comPort2->WriteData(pixelBuf, 1152*3);
+		write += glfwGetTime() - marker;
+		frame++;
+
+		while(comPort2->ReadData(checks, 4) == 0) {
+				}
+
+		marker = glfwGetTime();
+		if(glfwGetTime() > heartbeat) {
+			cout << "Time: " << heartbeat << " Frames: " << frame << " FPS: " << frame/heartbeat << endl;
+			double total = render + wait + read + write + fps;
+			cout << "Render " << render/frame*1000 << " Wait " << wait/frame*1000 << " Read " << read/frame*1000
+					<< " Write " << write/frame*1000 << " FPS " << fps/frame*1000 << endl;
+			cout << "Read: " << (int)checks[1] << " Write: " << (int)checks[2] << " Show: " << (int)checks[3] << endl;
+			heartbeat = glfwGetTime() + 2.0;
+		}
+		fps += glfwGetTime() - marker;
+	}
+}
+*/

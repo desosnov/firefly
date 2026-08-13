@@ -1,0 +1,1316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>GLFW@glfw-3.1.2-pc</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.cdt.make.core.makeBuilder</name>
+			<triggers>clean,full,incremental,</triggers>
+			<arguments>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.cleanBuildTarget</key>
+					<value>clean</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.enableCleanBuild</key>
+					<value>true</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.append_environment</key>
+					<value>true</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.stopOnError</key>
+					<value>true</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.enabledIncrementalBuild</key>
+					<value>true</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.build.command</key>
+					<value>C:/MinGW/bin/mingw32-make.exe</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.contents</key>
+					<value>org.eclipse.cdt.make.core.activeConfigSettings</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.build.target.inc</key>
+					<value>all</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.build.arguments</key>
+					<value></value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.buildLocation</key>
+					<value>C:/Users/Denis/Dropbox/Code/eclipse workspace/glfw-3.1.2-pc</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.useDefaultBuildCmd</key>
+					<value>false</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.environment</key>
+					<value>VERBOSE=1|CMAKE_NO_VERBOSE=1|</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.enableFullBuild</key>
+					<value>true</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.build.target.auto</key>
+					<value>all</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.enableAutoBuild</key>
+					<value>false</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.build.target.clean</key>
+					<value>clean</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.fullBuildTarget</key>
+					<value>all</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.buildArguments</key>
+					<value></value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.build.location</key>
+					<value>C:/Users/Denis/Dropbox/Code/eclipse workspace/glfw-3.1.2-pc</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.autoBuildTarget</key>
+					<value>all</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.core.errorOutputParser</key>
+					<value>org.eclipse.cdt.core.MakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GLDErrorParser;</value>
+				</dictionary>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.cdt.make.core.ScannerConfigBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.cdt.make.core.makeNature</nature>
+		<nature>org.eclipse.cdt.make.core.ScannerConfigNature</nature>
+		<nature>org.eclipse.cdt.core.cnature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>[Source directory]</name>
+			<type>2</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2</location>
+		</link>
+		<link>
+			<name>[Subprojects]</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Subprojects]/GLFW</name>
+			<type>2</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2</location>
+		</link>
+		<link>
+			<name>[Targets]</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[lib] glfw</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[lib] glfw/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[lib] glfw/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[lib] glfw/Source Files/context.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/src/context.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] glfw/Source Files/init.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/src/init.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] glfw/Source Files/input.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/src/input.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] glfw/Source Files/monitor.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/src/monitor.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] glfw/Source Files/window.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/src/window.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] glfw/Source Files/win32_init.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/src/win32_init.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] glfw/Source Files/win32_monitor.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/src/win32_monitor.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] glfw/Source Files/win32_time.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/src/win32_time.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] glfw/Source Files/win32_tls.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/src/win32_tls.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] glfw/Source Files/win32_window.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/src/win32_window.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] glfw/Source Files/winmm_joystick.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/src/winmm_joystick.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] glfw/Source Files/wgl_context.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/src/wgl_context.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] glfw/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[lib] glfw/Header Files/internal.h</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/src/internal.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] glfw/Header Files/glfw_config.h</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/eclipse workspace/glfw-3.1.2-pc/src/glfw_config.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] glfw/Header Files/glfw3.h</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/include/GLFW/glfw3.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] glfw/Header Files/glfw3native.h</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/include/GLFW/glfw3native.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] glfw/Header Files/win32_platform.h</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/src/win32_platform.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] glfw/Header Files/win32_tls.h</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/src/win32_tls.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] glfw/Header Files/winmm_joystick.h</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/src/winmm_joystick.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] glfw/Header Files/wgl_context.h</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/src/wgl_context.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[lib] glfw/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[lib] glfw/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[lib] glfw/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] gears</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] gears/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] gears/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] gears/Source Files/gears.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/examples/gears.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] gears/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] gears/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] gears/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] gears/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] splitview</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] splitview/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] splitview/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] splitview/Source Files/splitview.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/examples/splitview.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] splitview/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] splitview/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] splitview/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] splitview/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] wave</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] wave/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] wave/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] wave/Source Files/wave.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/examples/wave.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] wave/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] wave/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] wave/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] wave/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] boing</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] boing/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] boing/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] boing/Source Files/boing.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/examples/boing.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] boing/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] boing/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] boing/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] boing/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] simple</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] simple/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] simple/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] simple/Source Files/simple.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/examples/simple.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] simple/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] simple/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] simple/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] simple/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] particles</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] particles/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] particles/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] particles/Source Files/particles.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/examples/particles.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] particles/Source Files/tinycthread.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/deps/tinycthread.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] particles/Source Files/getopt.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/deps/getopt.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] particles/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] particles/Header Files/tinycthread.h</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/deps/tinycthread.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] particles/Header Files/getopt.h</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/deps/getopt.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] particles/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] particles/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] particles/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] heightmap</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] heightmap/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] heightmap/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] heightmap/Source Files/heightmap.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/examples/heightmap.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] heightmap/Source Files/glad.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/deps/glad.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] heightmap/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] heightmap/Header Files/glad.h</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/deps/glad/glad.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] heightmap/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] heightmap/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] heightmap/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] title</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] title/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] title/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] title/Source Files/title.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/tests/title.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] title/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] title/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] title/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] title/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] joysticks</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] joysticks/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] joysticks/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] joysticks/Source Files/joysticks.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/tests/joysticks.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] joysticks/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] joysticks/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] joysticks/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] joysticks/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] cursor</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] cursor/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] cursor/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] cursor/Source Files/cursor.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/tests/cursor.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] cursor/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] cursor/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] cursor/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] cursor/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] sharing</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] sharing/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] sharing/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] sharing/Source Files/sharing.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/tests/sharing.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] sharing/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] sharing/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] sharing/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] sharing/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] iconify</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] iconify/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] iconify/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] iconify/Source Files/iconify.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/tests/iconify.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] iconify/Source Files/getopt.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/deps/getopt.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] iconify/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] iconify/Header Files/getopt.h</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/deps/getopt.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] iconify/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] iconify/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] iconify/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] windows</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] windows/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] windows/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] windows/Source Files/windows.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/tests/windows.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] windows/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] windows/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] windows/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] windows/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] clipboard</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] clipboard/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] clipboard/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] clipboard/Source Files/clipboard.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/tests/clipboard.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] clipboard/Source Files/getopt.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/deps/getopt.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] clipboard/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] clipboard/Header Files/getopt.h</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/deps/getopt.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] clipboard/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] clipboard/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] clipboard/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] threads</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] threads/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] threads/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] threads/Source Files/threads.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/tests/threads.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] threads/Source Files/tinycthread.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/deps/tinycthread.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] threads/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] threads/Header Files/tinycthread.h</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/deps/tinycthread.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] threads/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] threads/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] threads/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] tearing</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] tearing/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] tearing/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] tearing/Source Files/tearing.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/tests/tearing.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] tearing/Source Files/getopt.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/deps/getopt.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] tearing/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] tearing/Header Files/getopt.h</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/deps/getopt.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] tearing/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] tearing/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] tearing/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] msaa</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] msaa/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] msaa/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] msaa/Source Files/msaa.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/tests/msaa.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] msaa/Source Files/getopt.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/deps/getopt.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] msaa/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] msaa/Header Files/getopt.h</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/deps/getopt.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] msaa/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] msaa/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] msaa/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] reopen</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] reopen/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] reopen/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] reopen/Source Files/reopen.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/tests/reopen.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] reopen/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] reopen/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] reopen/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] reopen/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] glfwinfo</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] glfwinfo/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] glfwinfo/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] glfwinfo/Source Files/glfwinfo.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/tests/glfwinfo.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] glfwinfo/Source Files/getopt.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/deps/getopt.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] glfwinfo/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] glfwinfo/Header Files/getopt.h</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/deps/getopt.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] glfwinfo/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] glfwinfo/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] glfwinfo/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] events</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] events/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] events/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] events/Source Files/events.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/tests/events.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] events/Source Files/getopt.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/deps/getopt.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] events/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] events/Header Files/getopt.h</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/deps/getopt.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] events/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] events/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] events/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] empty</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] empty/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] empty/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] empty/Source Files/empty.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/tests/empty.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] empty/Source Files/tinycthread.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/deps/tinycthread.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] empty/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] empty/Header Files/tinycthread.h</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/deps/tinycthread.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] empty/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] empty/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] empty/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] gamma</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] gamma/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] gamma/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] gamma/Source Files/gamma.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/tests/gamma.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] gamma/Source Files/getopt.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/deps/getopt.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] gamma/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] gamma/Header Files/getopt.h</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/deps/getopt.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] gamma/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] gamma/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] gamma/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] monitors</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] monitors/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] monitors/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] monitors/Source Files/monitors.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/tests/monitors.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] monitors/Source Files/getopt.c</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/deps/getopt.c</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] monitors/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] monitors/Header Files/getopt.h</name>
+			<type>1</type>
+			<location>C:/Users/Denis/Dropbox/Code/glfw-3.1.2/deps/getopt.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] monitors/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] monitors/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] monitors/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+	</linkedResources>
+</projectDescription>

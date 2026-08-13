@@ -1,0 +1,82 @@
+# Normalize all text files to LF in the repository.
+# Matches the global core.autocrlf = input, and travels with the repo
+# so it holds on any machine.
+* text=auto eol=lf
+
+# Windows-only scripts keep CRLF
+*.bat  text eol=crlf
+*.cmd  text eol=crlf
+*.ps1  text eol=crlf
+
+# Source — explicitly text
+*.c        text
+*.h        text
+*.cpp      text
+*.hpp      text
+*.ino      text
+*.cs       text
+*.shader   text
+*.compute  text
+*.cginc    text
+*.hlsl     text
+*.glsl     text
+*.md       text
+*.txt      text
+*.json     text
+*.xml      text
+*.yml      text
+*.yaml     text
+
+# Unity serialized assets are YAML text; keep them LF so diffs stay readable
+*.unity      text eol=lf
+*.prefab     text eol=lf
+*.asset      text eol=lf
+*.mat        text eol=lf
+*.anim       text eol=lf
+*.controller text eol=lf
+*.meta       text eol=lf
+
+# Binaries — never touch
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.bmp   binary
+*.tga   binary
+*.psd   binary
+*.ico   binary
+*.icns  binary
+*.wav   binary
+*.mp3   binary
+*.ogg   binary
+*.aif   binary
+*.fbx   binary
+*.obj   binary
+*.blend binary
+*.ttf   binary
+*.otf   binary
+*.pdf   binary
+*.zip   binary
+*.7z    binary
+*.gz    binary
+*.dll   binary
+*.exe   binary
+*.so    binary
+*.dylib binary
+*.lib   binary
+*.a     binary
+*.pdb   binary
+*.unitypackage binary
+
+# ── Archive exemption — MUST STAY LAST ───────────────────
+# Later rules win in .gitattributes, so this has to sit below every
+# rule above it or the per-extension `text` lines override it.
+#
+# The archived original codebase is committed exactly as it is on disk:
+# no line-ending conversion, no normalization. It's a snapshot, and its
+# vendored libraries (freeglut, GLFW, FastLED, GLM) ship with CRLF.
+# Delete this line if you'd rather normalize the archive too.
+#
+# The quotes are required — .gitattributes splits on whitespace and the
+# folder name contains a space.
+"Firefly Original/**" -text

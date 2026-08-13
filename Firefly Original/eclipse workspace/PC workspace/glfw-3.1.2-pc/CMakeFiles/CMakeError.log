@@ -1,0 +1,43 @@
+Determining if the include file pthread.h exists failed with the following output:
+Change Dir: C:/Users/Denis/Dropbox/Code/eclipse workspace/glfw-3.1.2-pc/CMakeFiles/CMakeTmp
+
+Run Build Command:"C:/MinGW/bin/mingw32-make.exe" "cmTC_fc02f/fast"
+C:/MinGW/bin/mingw32-make.exe -f CMakeFiles\cmTC_fc02f.dir\build.make CMakeFiles/cmTC_fc02f.dir/build
+mingw32-make.exe[1]: Entering directory 'C:/Users/Denis/Dropbox/Code/eclipse workspace/glfw-3.1.2-pc/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_fc02f.dir/CheckIncludeFile.c.obj
+C:\MinGW\bin\gcc.exe     -o CMakeFiles\cmTC_fc02f.dir\CheckIncludeFile.c.obj   -c "C:\Users\Denis\Dropbox\Code\eclipse workspace\glfw-3.1.2-pc\CMakeFiles\CMakeTmp\CheckIncludeFile.c"
+C:\Users\Denis\Dropbox\Code\eclipse workspace\glfw-3.1.2-pc\CMakeFiles\CMakeTmp\CheckIncludeFile.c:1:21: fatal error: pthread.h: No such file or directory
+ #include <pthread.h>
+                     ^
+compilation terminated.
+CMakeFiles\cmTC_fc02f.dir\build.make:64: recipe for target 'CMakeFiles/cmTC_fc02f.dir/CheckIncludeFile.c.obj' failed
+mingw32-make.exe[1]: *** [CMakeFiles/cmTC_fc02f.dir/CheckIncludeFile.c.obj] Error 1
+mingw32-make.exe[1]: Leaving directory 'C:/Users/Denis/Dropbox/Code/eclipse workspace/glfw-3.1.2-pc/CMakeFiles/CMakeTmp'
+Makefile:125: recipe for target 'cmTC_fc02f/fast' failed
+mingw32-make.exe: *** [cmTC_fc02f/fast] Error 2
+
+
+Performing C SOURCE FILE Test _GLFW_HAS_64ASLR failed with the following output:
+Change Dir: C:/Users/Denis/Dropbox/Code/eclipse workspace/glfw-3.1.2-pc/CMakeFiles/CMakeTmp
+
+Run Build Command:"C:/MinGW/bin/mingw32-make.exe" "cmTC_8a9e5/fast"
+C:/MinGW/bin/mingw32-make.exe -f CMakeFiles\cmTC_8a9e5.dir\build.make CMakeFiles/cmTC_8a9e5.dir/build
+mingw32-make.exe[1]: Entering directory 'C:/Users/Denis/Dropbox/Code/eclipse workspace/glfw-3.1.2-pc/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_8a9e5.dir/src.c.obj
+C:\MinGW\bin\gcc.exe    -D_GLFW_HAS_64ASLR -Wl,--high-entropy-va   -o CMakeFiles\cmTC_8a9e5.dir\src.c.obj   -c "C:\Users\Denis\Dropbox\Code\eclipse workspace\glfw-3.1.2-pc\CMakeFiles\CMakeTmp\src.c"
+Linking C executable cmTC_8a9e5.exe
+"C:\Program Files (x86)\CMake\bin\cmake.exe" -E cmake_link_script CMakeFiles\cmTC_8a9e5.dir\link.txt --verbose=1
+"C:\Program Files (x86)\CMake\bin\cmake.exe" -E remove -f CMakeFiles\cmTC_8a9e5.dir/objects.a
+C:\MinGW\bin\ar.exe cr CMakeFiles\cmTC_8a9e5.dir/objects.a @CMakeFiles\cmTC_8a9e5.dir\objects1.rsp
+C:\MinGW\bin\gcc.exe   -D_GLFW_HAS_64ASLR -Wl,--high-entropy-va    -Wl,--whole-archive CMakeFiles\cmTC_8a9e5.dir/objects.a -Wl,--no-whole-archive  -o cmTC_8a9e5.exe -Wl,--out-implib,libcmTC_8a9e5.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\cmTC_8a9e5.dir\linklibs.rsp
+c:/mingw/bin/../lib/gcc/mingw32/4.8.1/../../../../mingw32/bin/ld.exe: unrecognized option '--high-entropy-va'
+c:/mingw/bin/../lib/gcc/mingw32/4.8.1/../../../../mingw32/bin/ld.exe: use the --help option for usage information
+collect2.exe: error: ld returned 1 exit status
+CMakeFiles\cmTC_8a9e5.dir\build.make:98: recipe for target 'cmTC_8a9e5.exe' failed
+mingw32-make.exe[1]: *** [cmTC_8a9e5.exe] Error 1
+mingw32-make.exe[1]: Leaving directory 'C:/Users/Denis/Dropbox/Code/eclipse workspace/glfw-3.1.2-pc/CMakeFiles/CMakeTmp'
+Makefile:125: recipe for target 'cmTC_8a9e5/fast' failed
+mingw32-make.exe: *** [cmTC_8a9e5/fast] Error 2
+
+Source file was:
+int main(void) { return 0; }
