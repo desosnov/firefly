@@ -27,7 +27,11 @@ namespace Firefly
         public const double CAM_SPEED_HORIZ = 0.5;
         public const double CAM_SPEED_VERT = 0.3;
 
-        // Configured in Firefly.cs, matching Firefly.cpp's main().
+        // Configured in Firefly.cs, matching the arguments Firefly.cpp's main() passed
+        // to the FireflyController constructor.
+        public string windowTitle = DEFAULT_WINDOW_TITLE;
+        public int windowWidth = DEFAULT_WINDOW_WIDTH;
+        public int windowHeight = DEFAULT_WINDOW_HEIGHT;
         public PixelStageOption stageType = PixelStageOption.FIREFLY_V2_CYLINDER;
         public double animMinDuration = 10.0;
         public double animMaxDuration = 75.0;
@@ -222,6 +226,12 @@ namespace Firefly
 
         private void InitRendering()
         {
+            // initGL's glfwCreateWindow(width, height, title). Unity owns the window,
+            // so the size is applied through Screen; the title can only be set from
+            // Player Settings (Product Name) — there is no runtime API for it.
+            // No-op in the Editor, which sizes the Game view itself.
+            Screen.SetResolution(windowWidth, windowHeight, FullScreenMode.Windowed);
+
             unityCamera = Camera.main;
             if (unityCamera == null)
             {
@@ -239,15 +249,12 @@ namespace Firefly
             sphereMesh = temp.GetComponent<MeshFilter>().sharedMesh;
             Destroy(temp);
 
-            // Must be the custom shader: URP's stock Unlit keeps _BaseColor in the
-            // UnityPerMaterial cbuffer, so it can't vary per instance.
-            Shader shader = Shader.Find("Firefly/InstancedUnlit");
-            if (shader == null)
-            {
-                Debug.LogError("[FFC] Firefly/InstancedUnlit shader not found — every pixel will draw the same colour.");
-                shader = Shader.Find("Universal Render Pipeline/Unlit");
-            }
-            pixelMaterial = new Material(shader);
+            // Loaded as a material asset, not built from a shader at runtime. A
+            // material asset in Resources with Enable GPU Instancing ticked is what
+            // tells the build to keep the shader's INSTANCING_ON variant; a material
+            // constructed at runtime is invisible to variant stripping, and without
+            // that variant every pixel draws at one transform. See Port Notes.
+            pixelMaterial = new Material(Resources.Load<Material>("FireflyPixel"));
             pixelMaterial.enableInstancing = true;
 
             matrixBatch = new Matrix4x4[INSTANCE_BATCH];
@@ -303,27 +310,11 @@ namespace Firefly
             cylinderWalls.transform.position = new Vector3(0.5f, (float)(height / 2.0), 0.5f);
             cylinderWalls.transform.localScale = new Vector3((float)(radius * 2.0), (float)(height / 2.0), (float)(radius * 2.0));
 
-            Shader shader = Shader.Find("Universal Render Pipeline/Unlit");
-            if (shader == null) shader = Shader.Find("Unlit/Color");
-            Material wallMat = new Material(shader);
+            // Blending and double-sidedness are declared in the shader rather than
+            // poked into a stock URP material's keywords at runtime.
+            Material wallMat = new Material(Resources.Load<Material>("FireflyWall"));
             wallMat.SetColor(BaseColorID, new Color(PixelStage.CYL_DARKNESS, PixelStage.CYL_DARKNESS, PixelStage.CYL_DARKNESS, PixelStage.CYL_ALPHA));
-            SetMaterialTransparent(wallMat);
-            // Render both faces so the shell reads from inside as well as outside,
-            // as it did under GL with no culling.
-            wallMat.SetFloat("_Cull", (float)UnityEngine.Rendering.CullMode.Off);
             cylinderWalls.GetComponent<MeshRenderer>().material = wallMat;
-        }
-
-        private static void SetMaterialTransparent(Material m)
-        {
-            m.SetFloat("_Surface", 1.0f); // Transparent
-            m.SetFloat("_Blend", 0.0f);   // Alpha
-            m.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-            m.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-            m.SetInt("_ZWrite", 0);
-            m.DisableKeyword("_ALPHATEST_ON");
-            m.EnableKeyword("_ALPHABLEND_ON");
-            m.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
         }
 
         // ── Input ───────────────────────────────────────────────

@@ -73,7 +73,28 @@ Everything else is axis-agnostic. No animation, primitive, colour or easing code
 
 **Cylinder walls.** `drawDefaultCylinderWalls` emitted a `GL_TRIANGLE_STRIP` each frame. Now Unity's cylinder primitive, created once and scaled to the same radius and height, with `CYL_DARKNESS` and `CYL_ALPHA` on a transparent material and culling off so it reads as a shell from any angle (GL was drawing it unculled).
 
+**Window size and title.** `Firefly.cpp` passed `WINDOW_WIDTH`, `WINDOW_HEIGHT` and `WINDOW_TITLE` to the controller, which handed them to `glfwCreateWindow`. `Firefly.cs` passes the same three; `InitRendering` applies the size via `Screen.SetResolution` (a no-op in the Editor, which sizes the Game view itself). **The title can't be set from code** — Unity has no runtime window-title API, and `Application.productName` is read-only. The built player's title comes from Player Settings → Product Name, which should be set to "Firefly Controller".
+
+`FireflyController`'s own `DEFAULT_WINDOW_*` constants remain unreferenced, exactly as in the C++: the header declared them but the constructor took the values as arguments with no defaults, so `Firefly.cpp`'s copies always won.
+
+### Constants referenced nowhere
+
+Audited 2026-08-11. Twelve in total; nine were already dead in the C++.
+
+| Constant | Dead in |
+|---|---|
+| `DEFAULT_WINDOW_WIDTH` / `_HEIGHT` / `_TITLE` | C++ — superseded by `Firefly.cpp`'s own copies |
+| `SA_RINGS_PER_SECOND_RANGE` / `_CYCLE` | C++ — `updateInternal` only used `_AVG`. Ring *size* got the range-and-cycle treatment; ring *speed* never did |
+| `RSP_MIN_SATURATION` / `RSP_MAX_SATURATION` | C++ — the palette uses its `saturation` field and a literal `1.0` |
+| `RDP_MAX_SATURATION` | C++ — only `RDP_MIN_SATURATION` is used |
+| `CYL_STACKS` | C++ |
+| `PIXEL_SLICES` / `PIXEL_STACKS` / `CYL_SLICES` | **The port** — see below |
+
 **Tessellation constants are inert.** `PIXEL_SLICES`, `PIXEL_STACKS` and `CYL_SLICES` no longer have an effect — `GameObject.CreatePrimitive` returns a fixed baked mesh with no tessellation parameters. Kept as a record of what the original drew at. Denis's call (2026-08-11): the intent was a ball at each pixel and a translucent cylinder around it, not a specific vertex count, and the primitives are simpler. `CYL_STACKS` was already dead in the C++ — declared but never referenced, since the wall was a single strip with no vertical subdivision.
+
+**Materials are assets in `Assets/Resources/`, not built from shaders at runtime.** Getting the shader into the build isn't enough. Unity also strips shader *variants*, and `#pragma multi_compile_instancing` produces an `INSTANCING_ON` variant that only survives if some material in the build uses it with GPU instancing enabled. A material constructed at runtime is invisible to that analysis, so the variant was stripped and `Graphics.RenderMeshInstanced` silently fell back to the non-instanced path — every pixel drawn at one transform in the material's default colour, with no error logged. `FireflyPixel.mat` carries `m_EnableInstancingVariants: 1`, which keeps the variant.
+
+**Shaders live in `Assets/Resources/`, and are loaded with `Resources.Load`, not `Shader.Find`.** Unity only includes a shader in a build if something references it. Both Firefly shaders are referenced solely from code, so the build stripped them and `Shader.Find` returned null — including the stock `Universal Render Pipeline/Unlit` used as a fallback. `new Material(null)` then threw inside `InitRendering`, which aborted `Start()` before the stage, camera, animation or serial port existed, and `Update()` threw every frame after that. In the Editor none of this shows up, because the Editor has every shader loaded. Everything under `Resources/` is always included in a build, which makes the fix travel with the code rather than depending on the Always Included Shaders project setting.
 
 **Custom shader for per-pixel colour.** The C++ called `glColor3f` before each pixel's sphere. Instancing needs the equivalent as a per-instance shader property, and URP's stock Unlit declares `_BaseColor` inside `CBUFFER_START(UnityPerMaterial)` to stay SRP Batcher compatible — which makes it per-*material*, so a `MaterialPropertyBlock` vector array can't vary it per instance and every pixel draws the same colour. `Assets/Shaders/FireflyInstancedUnlit.shader` declares it with `UNITY_DEFINE_INSTANCED_PROP` instead. The cylinder wall still uses stock URP Unlit — it's one object and needs transparency, not instancing.
 

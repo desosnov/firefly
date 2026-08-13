@@ -15,6 +15,8 @@ namespace Firefly
     /// </summary>
     public static class FireflyMain
     {
+        public const int WINDOW_WIDTH = 1920;
+        public const int WINDOW_HEIGHT = 1280;
         public const string WINDOW_TITLE = "Firefly Controller";
         public const PixelStageOption STAGE_TYPE = PixelStageOption.FIREFLY_V2_CYLINDER;
         public const double ANIM_MIN_DURATION = 10.0;
@@ -26,9 +28,14 @@ namespace Firefly
             if (Object.FindFirstObjectByType<FireflyController>() != null) return;
 
             GameObject host = new GameObject(WINDOW_TITLE);
+            // Unity has no runtime window-title API. Set Product Name in Player
+            // Settings to "Firefly Controller" for the built player's title bar.
             Object.DontDestroyOnLoad(host);
 
             FireflyController ffc = host.AddComponent<FireflyController>();
+            ffc.windowTitle = WINDOW_TITLE;
+            ffc.windowWidth = WINDOW_WIDTH;
+            ffc.windowHeight = WINDOW_HEIGHT;
             ffc.stageType = STAGE_TYPE;
             ffc.animMinDuration = ANIM_MIN_DURATION;
             ffc.animMaxDuration = ANIM_MAX_DURATION;
