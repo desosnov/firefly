@@ -51,11 +51,13 @@ Same semantics — bind once, call `Update(time)`, the target updates itself. Th
 | GLFW | Input System |
 |---|---|
 | `action == GLFW_PRESS` | `wasPressedThisFrame` |
-| `action != GLFW_RELEASE` (auto-repeat: `=`, `-`) | `isPressed` |
+| `action != GLFW_RELEASE` (auto-repeat: `=`, `-`, calibration arrows) | `KeyRepeat.Poll` |
 | `action == GLFW_RELEASE` (`Esc`) | `wasReleasedThisFrame` |
 | mouse button / position / scroll callbacks | `Mouse.current` |
 
 No functional difference. No Player Settings change needed — the Input System is what Unity 6's URP template ships with.
+
+**Key auto-repeat had to be rebuilt.** GLFW delivered `GLFW_PRESS` then a stream of `GLFW_REPEAT` events at the OS's key-repeat rate — roughly a 500 ms delay then ~30/second. The Input System has no equivalent; `isPressed` is just true every frame. Firefly runs at ~600 FPS, so a held `=` stepped the power target 600 times a second with no initial delay, crossing the entire 500–9000 mA range in about 57 ms. `FireflyController.PollRepeat` reimplements the OS cadence and is used for `=`, `-` and the calibration arrows.
 
 **Mouse Y is inverted.** GLFW's Y grows downward, Unity's upward. `cam.Rotate` takes `(lastY - yPos)` where the C++ took `(yPos - lastY)`, so dragging feels the same.
 
@@ -67,17 +69,23 @@ No functional difference. No Player Settings change needed — the Input System 
 
 Everything else is axis-agnostic. No animation, primitive, colour or easing code was touched.
 
-**Pixel drawing.** `Pixel::render` / `Pixel::drawSphere` built a sphere per pixel from `glBegin`/`glVertex3f` triangle strips, every frame. Now the mesh is built once by `MeshBuilder.BuildSphere(PIXEL_SLICES, PIXEL_STACKS)` — same 8 × 3 tessellation — and drawn with `Graphics.RenderMeshInstanced` in batches of 1023. One draw call per batch instead of 1,440 immediate-mode spheres. `Pixel` keeps its position and colour; the drawing methods move to `MeshBuilder`.
+**Pixel drawing.** `Pixel::render` / `Pixel::drawSphere` built a sphere per pixel from `glBegin`/`glVertex3f` triangle strips, every frame. Now Unity's sphere primitive supplies the mesh and it's drawn with `Graphics.RenderMeshInstanced` in batches of 1023 — one draw call per batch instead of 1,440 immediate-mode spheres. `Pixel` keeps its position and colour; the drawing methods are gone.
 
-**Cylinder walls.** `drawDefaultCylinderWalls` emitted a `GL_TRIANGLE_STRIP` each frame. Now `MeshBuilder.BuildCylinderWall(CYL_SLICES, ...)` builds the same 24-segment open tube once, in world space, with `CYL_DARKNESS` and `CYL_ALPHA` on a transparent material and culling off so it reads as a shell from any angle (GL was drawing it uncalled).
+**Cylinder walls.** `drawDefaultCylinderWalls` emitted a `GL_TRIANGLE_STRIP` each frame. Now Unity's cylinder primitive, created once and scaled to the same radius and height, with `CYL_DARKNESS` and `CYL_ALPHA` on a transparent material and culling off so it reads as a shell from any angle (GL was drawing it unculled).
 
-`CYL_STACKS` remains unused — the C++ declared it but `drawDefaultCylinderWalls` never referenced it; the wall is a single strip with no vertical subdivision. Kept as a dead constant, as in the original.
+**Tessellation constants are inert.** `PIXEL_SLICES`, `PIXEL_STACKS` and `CYL_SLICES` no longer have an effect — `GameObject.CreatePrimitive` returns a fixed baked mesh with no tessellation parameters. Kept as a record of what the original drew at. Denis's call (2026-08-11): the intent was a ball at each pixel and a translucent cylinder around it, not a specific vertex count, and the primitives are simpler. `CYL_STACKS` was already dead in the C++ — declared but never referenced, since the wall was a single strip with no vertical subdivision.
 
 **Custom shader for per-pixel colour.** The C++ called `glColor3f` before each pixel's sphere. Instancing needs the equivalent as a per-instance shader property, and URP's stock Unlit declares `_BaseColor` inside `CBUFFER_START(UnityPerMaterial)` to stay SRP Batcher compatible — which makes it per-*material*, so a `MaterialPropertyBlock` vector array can't vary it per instance and every pixel draws the same colour. `Assets/Shaders/FireflyInstancedUnlit.shader` declares it with `UNITY_DEFINE_INSTANCED_PROP` instead. The cylinder wall still uses stock URP Unlit — it's one object and needs transparency, not instancing.
 
-**Why not Unity's built-in primitives.** `GameObject.CreatePrimitive` returns a fixed baked mesh with no tessellation parameters, so using it would have silently discarded `PIXEL_SLICES`, `PIXEL_STACKS` and `CYL_SLICES`. Generating both meshes reproduces the original geometry exactly, and the 8 × 3 sphere is far cheaper than Unity's default sphere across 1,440 instances.
+**Serial.** `Serial.h` `#ifdef`-ed between `Serial-PC.cpp` (Win32 `CreateFile`/`WriteFile`) and `arduino-serial-lib.cpp` (POSIX `termios`). `System.IO.Ports.SerialPort` covers both, so the split collapses to a few platform-conditional settings. Port names are unchanged: `COM9` and `/dev/cu.usbmodem27946701`.
 
-**Serial.** `Serial.h` `#ifdef`-ed between `Serial-PC.cpp` (Win32 `CreateFile`/`WriteFile`) and `arduino-serial-lib.c` (POSIX `termios`). `System.IO.Ports.SerialPort` covers both, so the split collapses to choosing the port name by `Application.platform`. Port names are unchanged: `COM9` and `/dev/cu.usbmodem27946701`. Failure to open is caught and logged rather than left as a dead handle — same outcome, `Available()` returns false and the app runs preview-only.
+Carried across from `Serial-PC.cpp`, all of which the first draft of this port missed:
+
+- **Baud is 1,000,000 on Windows, not 9,600.** `Serial.cpp`'s `COM_BAUD` of 9600 was only ever passed to the Mac path; the Windows DCB hardcoded `BaudRate = 1000000`. Both are moot on a Teensy, whose USB CDC ignores baud entirely, but the values now match.
+- **DTR asserted.** The DCB set `DTR_CONTROL_ENABLE`. The Mac path's DTR ioctls are commented out; asserting it there is harmless.
+- **Buffers purged and a 2-second wait after connecting.** `PurgeComm(PURGE_RXCLEAR | PURGE_TXCLEAR)` then `Sleep(ARDUINO_WAIT_TIME)`.
+
+`WriteTimeout` is `InfiniteTimeout` because both originals used blocking writes, and a failed write logs rather than closing the port.
 
 **Entry point.** `main()` becomes `FireflyMain.Main()`, tagged `[RuntimeInitializeOnLoadMethod]`, which creates the controller GameObject at load. No scene setup, no prefabs, no inspector wiring — open and press Play.
 
@@ -110,6 +118,23 @@ Quirks in the original that were reproduced rather than fixed. None of these are
 **`// TEMP HACK MOVE BACK TO PRIVATE`** on `PixelStage.pixels` / `pixelsLen`. Kept.
 
 ---
+
+## 3a. Additions with no counterpart in the original
+
+Audited 2026-08-11 after Denis asked where logic had been changed without being asked. These are the only places the port does something the C++ didn't.
+
+**Bounds guard in `CylinderCalibration.LightPixels`.** The C++ coloured `pixels[iter->first]` for every anchor with no range check; an anchor key past the end wrote out of bounds. C# throws instead, so the port skips keys `>= pixelsLen`. Additive, but the alternative is a crash.
+
+**Initialised locals in `CylinderCalibration.RadialAtIndex`.** The C++ declared `nextAnchor` and `nextRadial` uninitialised and read them if the loop never matched. C# won't compile that, so they start at 1 and 1.0 as they do in `nearestIndexToRadial` — the one place the original did initialise them.
+
+**Filling anchor-table gaps in `GenerateCylinderWithAnchors`.** `new Pixel[CYL_LEDS]` default-constructs every element in C++ and leaves nulls in C#, so the port fills any pixel the anchor table didn't reach with a default `Pixel`. Identical end state. Live whenever the V1 stage is selected, since its table stops at 1151 against 1440 LEDs.
+
+**Exception handling around `SerialPort.Open`.** `Serial-PC.cpp` printed an error and left `connected = false`; the port catches and leaves `port = null`. Same outcome by the only means C# offers.
+
+Two changes were made and then reverted once they turned out to be unrequested rather than necessary:
+
+- **RNG seeding.** The port briefly seeded from `Environment.TickCount`. `Firefly.cpp` never calls `srand()`, so C's `rand()` always started from the default seed of 1 and was merely advanced a clock-derived number of steps. Now seeded with 1 to match.
+- **Hue wrapping in `HSVtoRGB`.** The port briefly wrapped negative hues into range. `fmod` doesn't, and no palette ever produces a negative hue. Reverted to a plain `%`.
 
 ## 4. One thing the original left undefined
 

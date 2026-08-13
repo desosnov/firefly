@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 
 namespace Firefly
 {
@@ -63,9 +64,15 @@ namespace Firefly
 
         void Start()
         {
-            // Firefly.cpp seeds the RNG from the clock before anything else.
+            // A GLFW window kept rendering whether or not it had focus. Unity stops
+            // by default, which would freeze the sculpture the moment another window
+            // is clicked. Mirrors the Run In Background player setting, so the
+            // behaviour survives a fresh clone.
+            Application.runInBackground = true;
+
+            // Firefly.cpp advances the (unseeded) global rand() a clock-derived
+            // number of steps before anything else.
             int randVal = (int)(DateTimeOffset.UtcNow.ToUnixTimeSeconds()) % 123;
-            FireflyUtils.Seed(Environment.TickCount);
             for (int i = 0; i < randVal; i++) FireflyUtils.Rand();
 
             InitRendering();
@@ -228,7 +235,9 @@ namespace Firefly
             unityCamera.nearClipPlane = 0.2f;
             unityCamera.farClipPlane = 100.0f;
 
-            sphereMesh = MeshBuilder.BuildSphere(Pixel.PIXEL_SLICES, Pixel.PIXEL_STACKS);
+            GameObject temp = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            sphereMesh = temp.GetComponent<MeshFilter>().sharedMesh;
+            Destroy(temp);
 
             // Must be the custom shader: URP's stock Unlit keeps _BaseColor in the
             // UnityPerMaterial cbuffer, so it can't vary per instance.
@@ -285,22 +294,24 @@ namespace Firefly
             double radius = (PixelStage.CYL_DIAM / 2.0 - PixelStage.CYL_PIXEL_RADIUS) * PixelStage.SCALE_FACTOR;
             double height = PixelStage.CYL_HEIGHT * PixelStage.SCALE_FACTOR;
 
-            // Built at CYL_SLICES segments, matching the original triangle strip,
-            // with the geometry baked in world space exactly as the C++ emitted it.
-            Mesh wallMesh = MeshBuilder.BuildCylinderWall(PixelStage.CYL_SLICES, radius, height, 0.5, 0.5);
+            cylinderWalls = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+            cylinderWalls.name = "Cylinder Walls";
+            Destroy(cylinderWalls.GetComponent<Collider>());
 
-            cylinderWalls = new GameObject("Cylinder Walls");
-            cylinderWalls.AddComponent<MeshFilter>().sharedMesh = wallMesh;
+            // Unity's cylinder is 2 units tall, 1 unit across, centred on its origin.
+            // Firefly's runs 0..CYL_HEIGHT in Y around (0.5, 0.5) in x/z.
+            cylinderWalls.transform.position = new Vector3(0.5f, (float)(height / 2.0), 0.5f);
+            cylinderWalls.transform.localScale = new Vector3((float)(radius * 2.0), (float)(height / 2.0), (float)(radius * 2.0));
 
             Shader shader = Shader.Find("Universal Render Pipeline/Unlit");
             if (shader == null) shader = Shader.Find("Unlit/Color");
             Material wallMat = new Material(shader);
             wallMat.SetColor(BaseColorID, new Color(PixelStage.CYL_DARKNESS, PixelStage.CYL_DARKNESS, PixelStage.CYL_DARKNESS, PixelStage.CYL_ALPHA));
             SetMaterialTransparent(wallMat);
-            // Open tube with no caps — render both faces so it reads as a translucent
-            // shell from any angle, as it did under GL with no culling.
+            // Render both faces so the shell reads from inside as well as outside,
+            // as it did under GL with no culling.
             wallMat.SetFloat("_Cull", (float)UnityEngine.Rendering.CullMode.Off);
-            cylinderWalls.AddComponent<MeshRenderer>().material = wallMat;
+            cylinderWalls.GetComponent<MeshRenderer>().material = wallMat;
         }
 
         private static void SetMaterialTransparent(Material m)
@@ -317,11 +328,55 @@ namespace Firefly
 
         // ── Input ───────────────────────────────────────────────
 
+        // GLFW delivered GLFW_PRESS then a stream of GLFW_REPEAT events at the OS's
+        // key-repeat rate — roughly a 500ms delay then ~30/second. The Input System
+        // has no equivalent: isPressed is simply true every frame, which at Firefly's
+        // several-hundred FPS steps about twenty times faster than the original and
+        // with no initial delay. PollRepeat reproduces the OS cadence.
+        private const double KEY_REPEAT_DELAY = 0.5;  // seconds held before repeating
+        private const double KEY_REPEAT_RATE = 30.0;  // repeats per second thereafter
+
+        private readonly Dictionary<Key, double> nextKeyRepeat = new Dictionary<Key, double>();
+
+        /// <summary>
+        /// True on the frame the key goes down, then again at the repeat rate for as
+        /// long as it's held. Equivalent of GLFW's PRESS-then-REPEAT stream.
+        /// </summary>
+        private bool PollRepeat(Keyboard kb, Key key, double now)
+        {
+            ButtonControl control = kb[key];
+
+            if (control.wasPressedThisFrame)
+            {
+                nextKeyRepeat[key] = now + KEY_REPEAT_DELAY;
+                return true;
+            }
+
+            if (!control.isPressed)
+            {
+                nextKeyRepeat.Remove(key);
+                return false;
+            }
+
+            double next;
+            if (!nextKeyRepeat.TryGetValue(key, out next)) return false;
+
+            if (now >= next)
+            {
+                nextKeyRepeat[key] = now + 1.0 / KEY_REPEAT_RATE;
+                return true;
+            }
+
+            return false;
+        }
+
         private void HandleInput()
         {
             Keyboard kb = Keyboard.current;
             Mouse mouse = Mouse.current;
             if (kb == null || mouse == null) return;
+
+            double now = Time.realtimeSinceStartupAsDouble;
 
             if (kb[Key.Escape].wasReleasedThisFrame)
             {
@@ -332,9 +387,10 @@ namespace Firefly
 #endif
             }
 
-            // Held, not tapped — the C++ tested action != GLFW_RELEASE, so these repeat.
-            if (kb[Key.Equals].isPressed) stage.BrightnessUp();
-            if (kb[Key.Minus].isPressed) stage.BrightnessDown();
+            // The C++ tested action != GLFW_RELEASE, so these fired on press and then
+            // on every OS auto-repeat. KeyRepeat reproduces that cadence.
+            if (PollRepeat(kb, Key.Equals, now)) stage.BrightnessUp();
+            if (PollRepeat(kb, Key.Minus, now)) stage.BrightnessDown();
 
             if (kb[Key.Space].wasPressedThisFrame) { }
 
@@ -359,11 +415,11 @@ namespace Firefly
 
                 // The C++ handled GLFW_PRESS and GLFW_REPEAT, so holding an arrow
                 // key auto-repeats the step.
-                if (kb[Key.LeftArrow].wasPressedThisFrame)
+                if (PollRepeat(kb, Key.LeftArrow, now))
                 {
                     if (shift) calibration.GoLeft(10); else calibration.GoLeft(1);
                 }
-                if (kb[Key.RightArrow].wasPressedThisFrame)
+                if (PollRepeat(kb, Key.RightArrow, now))
                 {
                     if (shift) calibration.GoRight(10); else calibration.GoRight(1);
                 }

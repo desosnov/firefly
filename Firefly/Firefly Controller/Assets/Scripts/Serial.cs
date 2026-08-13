@@ -13,25 +13,52 @@ namespace Firefly
     /// </summary>
     public class Serial
     {
-        public const string WIN_COM = "COM9";
+        // Was COM9 in the C++; the Teensy enumerates on COM4 on Denis's current PC.
+        public const string WIN_COM = "COM4";
         public const string MAC_COM = "/dev/cu.usbmodem27946701";
+
+        // Serial.cpp's COM_BAUD of 9600 was only ever passed to the Mac path;
+        // Serial-PC.cpp hardcoded BaudRate = 1000000 in its DCB. Both are moot on a
+        // Teensy, whose USB CDC ignores the baud setting, but the values are kept.
         public const int COM_BAUD = 9600;
+        public const int WIN_BAUD = 1000000;
+
+        // Serial-PC.cpp slept this long after connecting, for the board to reset.
+        public const int ARDUINO_WAIT_TIME = 2000;
 
         private SerialPort port;
 
         public bool InitComms()
         {
-            string portName = Application.platform == RuntimePlatform.WindowsPlayer
-                              || Application.platform == RuntimePlatform.WindowsEditor
-                ? WIN_COM
-                : MAC_COM;
+            bool windows = Application.platform == RuntimePlatform.WindowsPlayer
+                           || Application.platform == RuntimePlatform.WindowsEditor;
+            string portName = windows ? WIN_COM : MAC_COM;
 
             try
             {
-                port = new SerialPort(portName, COM_BAUD);
-                port.WriteTimeout = 1000;
+                port = new SerialPort(portName, windows ? WIN_BAUD : COM_BAUD);
+
+                // The C++ used a blocking WriteFile / write(). A finite timeout here
+                // would throw whenever the device fell behind, which it will — the
+                // desktop renders far faster than the Teensy can consume frames.
+                port.WriteTimeout = SerialPort.InfiniteTimeout;
                 port.ReadTimeout = 1000;
+
+                // Serial-PC.cpp set DTR_CONTROL_ENABLE in its DCB. The Mac path left
+                // its DTR ioctls commented out, but asserting it is harmless there.
+                port.DtrEnable = true;
+
                 port.Open();
+
+                if (windows)
+                {
+                    // Matches PurgeComm(PURGE_RXCLEAR | PURGE_TXCLEAR) followed by
+                    // Sleep(ARDUINO_WAIT_TIME) in Serial-PC.cpp.
+                    port.DiscardInBuffer();
+                    port.DiscardOutBuffer();
+                    System.Threading.Thread.Sleep(ARDUINO_WAIT_TIME);
+                }
+
                 FireflyUtils.Log("[Serial] Opened " + portName);
             }
             catch (Exception e)
@@ -61,8 +88,10 @@ namespace Firefly
             }
             catch (Exception e)
             {
-                FireflyUtils.Log("[Serial] Write failed, closing port. (" + e.Message + ")");
-                Close();
+                // Log and carry on rather than closing. The C++ kept writing to its
+                // handle regardless; closing here would blank the sculpture for the
+                // rest of the run on a single hiccup.
+                FireflyUtils.Log("[Serial] Write failed. (" + e.Message + ")");
                 return 0;
             }
         }

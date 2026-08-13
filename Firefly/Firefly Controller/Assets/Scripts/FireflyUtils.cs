@@ -13,7 +13,12 @@ namespace Firefly
 
         // The C++ used the global C rand()/srand(). One shared generator keeps the
         // same "one stream for the whole program" behaviour.
-        private static System.Random rng = new System.Random();
+        //
+        // Firefly.cpp never calls srand(), so C's rand() always started from the
+        // default seed of 1 and main() simply advanced it a time-derived number of
+        // steps. Seeding from 1 here preserves that: the same stream every launch,
+        // offset by the advance in FireflyController.Start.
+        private static System.Random rng = new System.Random(1);
 
         public static void Seed(int seed)
         {
@@ -70,7 +75,7 @@ namespace Firefly
         public static void HSVtoRGB(out float fR, out float fG, out float fB, float fH, float fS, float fV)
         {
             float fC = fV * fS;
-            float fHPrime = (float)(((fH / 60.0) % 6.0 + 6.0) % 6.0);
+            float fHPrime = (float)((fH / 60.0) % 6.0);
             float fX = fC * (1 - Mathf.Abs(fHPrime % 2 - 1));
             float fM = fV - fC;
 

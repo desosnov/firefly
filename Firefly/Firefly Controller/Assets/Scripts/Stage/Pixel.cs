@@ -10,8 +10,9 @@ namespace Firefly
     {
         public static readonly Vector3 DEFAULT_COLOR = new Vector3(0.5f, 0.7f, 0.7f);
 
-        // Tessellation of the sphere each pixel is drawn as. The C++ passed these
-        // to drawSphere; here MeshBuilder uses them to build the instanced mesh.
+        // The C++ passed these to drawSphere. Unity's sphere primitive supplies the
+        // mesh now, so they no longer have an effect — kept as a record of the
+        // tessellation the original drew at.
         public const int PIXEL_SLICES = 8;
         public const int PIXEL_STACKS = 3;
 
