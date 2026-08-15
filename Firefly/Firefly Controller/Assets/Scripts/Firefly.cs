@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Firefly
 {
     /// <summary>
-    /// Port of Firefly.cpp — the entry point.
+    /// The entry point.
     ///
     /// The C++ main() constructed a FireflyController with the window title, size,
     /// serial port and stage type, then called start(). Unity owns the window, so

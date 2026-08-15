@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace Firefly
 {
-    /// <summary>Port of AnimationSetPlayer.h / .cpp.</summary>
     public class AnimationSetPlayer : AAnimation
     {
         public const int ASP_MAX_SHADERS = 5;

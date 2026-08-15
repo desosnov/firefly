@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Firefly
 {
-    /// <summary>Port of BalloonsAnimation.h / .cpp (originally WorldOfBalloonsAnimation).</summary>
+    /// <summary>Originally named WorldOfBalloonsAnimation in the C++.</summary>
     public class BalloonsAnimation : AAnimation
     {
         public const double WOB_MIN_SIZE = 0.05;
@@ -179,33 +179,5 @@ namespace Firefly
         public override void BeginWrappingUp() { wrappingUp = true; }
         public override bool ReadyForNextAnimation() { return nextAnimationFlag; }
         public override bool Finished() { return finishedFlag; }
-    }
-
-    /// <summary>Port of BalloonsAtPixelsAnimation.h / .cpp.</summary>
-    public class BalloonsAtPixelsAnimation : BalloonsAnimation
-    {
-        public BalloonsAtPixelsAnimation(PixelStage stage)
-            : this(stage, new RandomSaturatedPalette(), new SolidColorsScheme()) { }
-
-        public BalloonsAtPixelsAnimation(PixelStage stage, AColorPalette palette, AColorScheme scheme)
-            : base(stage, palette, scheme)
-        {
-            subpixelSampling = false;
-        }
-
-        protected override SpherePrim NewSphere()
-        {
-            int pixel = FireflyUtils.Rand() % stage.pixelsLen;
-            Vector3 center = stage.pixels[pixel].GetPos();
-            Vector3 offset = new Vector3(
-                (float)FireflyUtils.Rand(-1.0, 1.0),
-                (float)FireflyUtils.Rand(-1.0, 1.0),
-                (float)FireflyUtils.Rand(-1.0, 1.0)) * (float)stage.GetPixelRadius();
-            center += offset;
-
-            SpherePrim sphere = new SpherePrim(center, 0.0, colorScheme.NextColor(), (int)numSpheres);
-            numSpheres++;
-            return sphere;
-        }
     }
 }

@@ -11,7 +11,6 @@ namespace Firefly
         MOVEMENT = 3
     }
 
-    /// <summary>Port of CylinderCalibration.h / .cpp.</summary>
     public class CylinderCalibration
     {
         public const double CALIBRATION_ANCHOR_MOVE_INTERVAL = .01;

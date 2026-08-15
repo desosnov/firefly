@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace Firefly
 {
-    /// <summary>Port of the PixelStageOption enum in PixelStage.h.</summary>
     public enum PixelStageOption
     {
         DEFAULT_CYLINDER = 1,
@@ -13,7 +12,6 @@ namespace Firefly
         FIREFLY_V2_CYLINDER = 4
     }
 
-    /// <summary>Port of PixelStage.h / .cpp.</summary>
     public class PixelStage
     {
         public const double CYL_DIAM = 2.54 * 5.75;

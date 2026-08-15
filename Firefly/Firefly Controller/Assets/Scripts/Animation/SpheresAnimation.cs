@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace Firefly
 {
-    /// <summary>Port of SpheresAnimation.h / .cpp.</summary>
     public class SpheresAnimation : AAnimation
     {
         // SA = SpheresAnimation

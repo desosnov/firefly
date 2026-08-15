@@ -3,8 +3,8 @@ using UnityEngine;
 namespace Firefly
 {
     /// <summary>
-    /// Port of Pixel.h / .cpp. The immediate-mode drawSphere() and render() are
-    /// dropped — drawing is now instanced from PixelStage. See Port Notes.
+    /// The immediate-mode drawSphere() and render() are dropped — drawing is now
+    /// instanced from PixelStage. See Port Notes.
     /// </summary>
     public class Pixel
     {

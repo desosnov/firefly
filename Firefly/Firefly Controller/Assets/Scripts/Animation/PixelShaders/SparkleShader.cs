@@ -4,8 +4,6 @@ using UnityEngine;
 namespace Firefly
 {
     /// <summary>
-    /// Port of SparkleShader.h / .cpp.
-    ///
     /// Two quirks carried over verbatim from the original — see Port Notes:
     ///  - RenderPixel uses the SPARKLE_* constants, not the instance fields the
     ///    constructor stores, so the registered presets' parameters have no effect.

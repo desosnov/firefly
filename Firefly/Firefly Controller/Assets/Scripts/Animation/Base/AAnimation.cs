@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace Firefly
 {
-    /// <summary>Port of AAnimation.h / .cpp.</summary>
     public abstract class AAnimation
     {
         public const double SUBPIXEL_RADIUS_RATIO = 1.0;

@@ -23,6 +23,10 @@
 //   6..7   pixel count in this chunk, big endian
 //   8..    RGB triples
 
+// Note: FASTLED_FORCE_SOFTWARE_SPI is a pre-Channels-API macro and this
+// FastLED version ignores it — the driver is pinned explicitly below instead,
+// via the fl::Bus::BIT_BANG template argument on addLeds<>().
+
 #include "FastLED.h"
 
 // ------------------------------ BOARD CONFIG ------------------------------
@@ -35,7 +39,7 @@
   #define FIREFLY_BOARD_ESP32 1
   // Adjust to match how the strip is wired to the devkit.
   #define DATA_PIN   11
-  #define CLOCK_PIN  12
+  #define CLOCK_PIN  47
 #else
   #error "Unrecognised board. Select Teensy 3.2 or an ESP32-S3 target."
 #endif
@@ -96,6 +100,39 @@ void clearLeds() {
   fill_solid(leds, NUM_LEDS, CRGB::Black);
 }
 
+// ---------------------------- STATUS INDICATOR -----------------------------
+//
+// Pixels 0 and 1 double as a connectivity indicator: dark->bright->dark over
+// 30 frames, in a colour set by ledStatus. RECEIVING leaves them alone so
+// real pixel data isn't clobbered once frames are actually flowing.
+
+enum LedStatus { SOFT_AP, WIFI_SET, WIFI_CONNECTED, RECEIVING };
+LedStatus ledStatus = WIFI_CONNECTED;
+unsigned long statusFrame = 0;
+
+void applyStatusIndicator() {
+  if (ledStatus == RECEIVING) return;
+
+  CRGB color = CRGB::Black;
+  if (ledStatus == SOFT_AP)             color = CRGB::Blue;
+  else if (ledStatus == WIFI_SET)       color = CRGB::Yellow;
+  else if (ledStatus == WIFI_CONNECTED) color = CRGB::White;
+
+  int phase = statusFrame % 60;
+  statusFrame++;
+  int level = phase < 30 ? (phase * 100) / 29 : 100 - (((phase - 30) * 100) / 29);
+
+  CRGB pulsed = color;
+  pulsed.red   = pulsed.red   * level / 255;
+  pulsed.green = pulsed.green * level / 255;
+  pulsed.blue  = pulsed.blue  * level / 255;
+
+  // This strip's wiring needs red/blue swapped to show true colour — the same
+  // compensation setPixel() applies to incoming frame data (0 Facts.md §3.1).
+  leds[0] = CRGB(pulsed.blue, pulsed.green, pulsed.red);
+  leds[1] = CRGB(pulsed.blue, pulsed.green, pulsed.red);
+}
+
 // ------------------------------- SHOW LEDS --------------------------------
 
 unsigned long last_frame_ms;
@@ -109,6 +146,8 @@ void showLeds() {
     leds[i].green = leds[i].green * bright;
     leds[i].blue = leds[i].blue * bright;
   }
+
+  applyStatusIndicator();
 
   FastLED.show();
 }
@@ -141,9 +180,9 @@ void renderWorm() {
     pixel_rgb.blue = pixel_rgb.blue * pixel_bright / 255;
 
     int li = (wormPos + wormOffset) % WORM_FIELD_SIZE;
-    leds[li].red = MIN(255, leds[li].red + pixel_rgb.red);
-    leds[li].blue = MIN(255, leds[li].blue + pixel_rgb.blue);
-    leds[li].green = MIN(255, leds[li].green + pixel_rgb.green);
+    leds[li].red = min(255, leds[li].red + pixel_rgb.red);
+    leds[li].blue = min(255, leds[li].blue + pixel_rgb.blue);
+    leds[li].green = min(255, leds[li].green + pixel_rgb.green);
   }
 
   wormPos += WORM_SPEED;
@@ -294,11 +333,14 @@ void startSoftAP() {
   WiFi.mode(WIFI_AP);
   WiFi.softAP(deviceName.c_str());
 
+  Serial.println("Starting soft AP " + deviceName);
+
   server.on("/firefly", handleIdentify);
   server.on("/provision", handleProvision);
   server.begin();
 
   provisioned = false;
+  ledStatus = SOFT_AP;
 }
 
 bool startStation() {
@@ -308,6 +350,8 @@ bool startStation() {
   prefs.end();
 
   if (ssid.length() == 0) return false;
+
+  ledStatus = WIFI_SET;
 
   WiFi.mode(WIFI_STA);
   WiFi.setSleep(false);            // latency matters more than power here
@@ -322,6 +366,7 @@ bool startStation() {
 
   udp.begin(FIREFLY_PORT);
   provisioned = true;
+  ledStatus = WIFI_CONNECTED;
   return true;
 }
 
@@ -392,10 +437,11 @@ void fadeToInput() {
 
 bool readAnyFrame() {
 #if FIREFLY_BOARD_ESP32
-  if (provisioned && readWifiFrame()) return true;
+  if (provisioned && readWifiFrame()) { ledStatus = RECEIVING; return true; }
   if (!provisioned) server.handleClient();
 #endif
-  return readSerialFrame();
+  if (readSerialFrame()) { ledStatus = RECEIVING; return true; }
+  return false;
 }
 
 void setup() {
@@ -404,11 +450,37 @@ void setup() {
 
   Serial.begin(COM_BAUD);
 
+#if FIREFLY_BOARD_ESP32
+  // This board doesn't auto-reset when the Serial Monitor attaches, so without
+  // this wait, early boot prints fire before the monitor connects and are lost.
+  // Caps at 3s so it still boots fine with no computer attached.
+  unsigned long serialWaitStart = millis();
+  while (!Serial && millis() - serialWaitStart < 3000) {
+    delay(10);
+  }
+#endif
+
+  Serial.println("Start setup");
+  #if FIREFLY_BOARD_ESP32
+    Serial.println("ESP32 S3 board");
+  #endif
+  Serial.println(CLOCK_PIN);
+
+  // fl::Bus::BIT_BANG pins the portable cycle-counted GPIO driver explicitly.
+  // Without it, FastLED's auto-selection picks the highest-priority driver
+  // that claims to handle SPI chipsets — on the S3 that's LCD_SPI (priority
+  // 10), which has a known esp_cache_msync/DMA bug that hangs mid-frame and
+  // trips the interrupt watchdog. BIT_BANG (priority 0) skips DMA entirely.
   FastLED.addLeds<SK9822, DATA_PIN, CLOCK_PIN, RGB, DATA_RATE_MHZ(7)>(leds, NUM_LEDS);
 
   clearLeds();
   showLeds();
   delay(1000);
+
+  // Started before the WiFi connect attempt below, which can block
+  // renderScreensaver() calls for up to 15s — otherwise brightness sits at
+  // its initial 0.0 for that whole window and the screensaver is invisible.
+  fadeBrightness(1.0, 3500L);
 
 #if FIREFLY_BOARD_ESP32
   makeDeviceName();
@@ -416,8 +488,6 @@ void setup() {
     startSoftAP();
   }
 #endif
-
-  fadeBrightness(1.0, 3500L);
 
   while (!readAnyFrame()) {
     renderScreensaver();
@@ -443,20 +513,23 @@ void loop() {
     return;
   }
 
-  if (showingInput && millis() - lastFrame_ms < INPUT_TIMEOUT_MS) {
-    showLeds();          // hold the last frame
-    return;
-  }
+    if (showingInput && millis() - lastFrame_ms < INPUT_TIMEOUT_MS) {
+      showLeds();          // hold the last frame
+      return;
+    }
 
-  if (showingInput) {
-    fadeBrightness(0.0, 3500L);
-    unsigned long stopTime = millis() + 3500L;
-    while (!readAnyFrame() && millis() < stopTime) {
-      showLeds();
+    if (showingInput) {
+      fadeBrightness(0.0, 3500L);
+      unsigned long stopTime = millis() + 3500L;
+      while (!readAnyFrame() && millis() < stopTime) {
+        showLeds();
     }
     clearLeds();
     fadeBrightness(1.0, 5000L);
     showingInput = false;
+    #if FIREFLY_BOARD_ESP32
+      if (provisioned) ledStatus = WIFI_CONNECTED;
+    #endif
   }
 
   renderScreensaver();

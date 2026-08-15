@@ -7,8 +7,6 @@ using UnityEngine.InputSystem.Controls;
 namespace Firefly
 {
     /// <summary>
-    /// Port of FireflyController.h / .cpp.
-    ///
     /// GLFW window creation, the GL state setup and the while(!shouldClose) loop are
     /// replaced by Unity's lifecycle: Start() is the constructor plus start(), Update()
     /// is one pass of render(). Input moves from GLFW callbacks to polling. The
